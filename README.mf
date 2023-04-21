@@ -1,0 +1,2 @@
+- Playbook http.yml добавляет роли users и http к группе хостов
+- Playbook php.yml добавляет роли users и php к группе хостов
