@@ -1,0 +1,34 @@
+---
+# tasks file for users
+- name: Create Group superusers
+  ansible.builtin.group:
+    name: superusers
+    state: present
+- name: Create users and add to group
+  ansible.builtin.user:
+    name: "{{ item }}"
+    groups: "superusers"
+    state: present
+  with_items:
+    - admin
+- name: Add superusers group to sudoers
+  ansible.builtin.copy:
+    src: files/etc/sudoers.d/superusers
+    dest: /etc/sudoers.d/superusers
+    owner: root
+    group: root
+    mode: '0440'
+- name: Create ssh dir
+  ansible.builtin.file:
+    path: /home/admin/.ssh
+    state: directory
+    owner: admin
+    group: admin
+    mode: '0750'
+- name: Create authorized_keys
+  ansible.builtin.copy:
+    src: files/home/admin/.ssh/authorized_keys
+    dest: /home/admin/.ssh/authorized_keys
+    owner: admin
+    group: admin
+    mode: '0700'

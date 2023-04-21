@@ -1,0 +1,10 @@
+---
+# handlers file for http
+- name: "restart_nginx"
+  ansible.builtin.service:
+    name: nginx
+    state: restarted
+- name: "restart_firewalld"
+  ansible.builtin.service:
+    name: firewalld
+    state: restarted

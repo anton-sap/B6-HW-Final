@@ -1,0 +1,33 @@
+---
+# tasks file for http
+- name: Ensure nginx is installed
+  ansible.builtin.yum:
+    name: "{{ item }}"
+    state: installed
+  with_items:
+    - nginx
+    - php
+- name: Ensure nginx is started and enabled
+  ansible.builtin.service:
+    name: nginx
+    state: started
+    enabled: yes
+- name: Add basic php page
+  ansible.builtin.copy:
+    src: files/usr/share/nginx/html/index.php
+    dest: /usr/share/nginx/html/index.php
+  notify:
+    - "restart_nginx"
+- name: Replace default nginx.conf
+  ansible.builtin.copy:
+    src: files/etc/nginx/nginx.conf
+    dest: /etc/nginx/nginx.conf
+  notify:
+    - "restart_nginx"
+- name: Open 80/tcp port for nginx connections
+  ansible.posix.firewalld:
+    port: 80/tcp
+    permanent: true
+    state: enabled
+  notify:
+    - "restart_firewalld"

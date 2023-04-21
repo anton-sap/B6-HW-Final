@@ -1,0 +1,10 @@
+---
+# handlers file for php
+- name: "restart_php-fpm"
+  ansible.builtin.service:
+    name: php-fpm
+    state: restarted
+- name: "restart_firewalld"
+  ansible.builtin.service:
+    name: firewalld
+    state: restarted
